@@ -20,6 +20,7 @@ import com.orderMicroservice.data.ResponseData
 import com.orderMicroservice.fixtures.OrderFixture
 import org.mockito.Mockito._
 import org.scalatest.concurrent.PatienceConfiguration
+import play.api.libs.json.JsString
 import play.api.test.Helpers._
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.play.test.UnitSpec
@@ -45,6 +46,16 @@ class OrderControllerSpec extends UnitSpec
       whenReady(result) { res =>
         status(res) shouldEqual CREATED
       }
+    }
+  }
+
+  "return a 500 (internal server error) when an order could not be created" in {
+    when(mockOrderService.createOrder(org.mockito.Matchers.eq(testOrder1))).thenReturn(Future.failed(new Exception("mongo error")))
+    val result = Helpers.call(orderController.createOrder, FakeRequest().withJsonBody(validOrderJson))
+
+    whenReady(result) { res =>
+      status(res) shouldEqual INTERNAL_SERVER_ERROR
+      jsonBodyOf(res) shouldEqual JsString(CREATE_ORDER_500)
     }
   }
 }
