@@ -22,12 +22,7 @@ import com.orderMicroservice.models.Order
   * Created by jason on 01/02/17.
   */
 trait LoggerErrorData {
-  def findCustomerOrderError(customerID: String, ex: Throwable): String = {
-    s"Error retrieving customer, customerID: $customerID, orders, exception: ${ex.getMessage}"
-  }
-
   def creatingOrderError(order: Order, ex: Throwable): String = {
     s"Error creating order: ${order.toString}, exception: ${ex.getMessage}"
   }
-
 }

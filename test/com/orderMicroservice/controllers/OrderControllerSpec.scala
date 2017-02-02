@@ -58,4 +58,6 @@ class OrderControllerSpec extends UnitSpec
       jsonBodyOf(res) shouldEqual JsString(CREATE_ORDER_500)
     }
   }
+
+  ""
 }
