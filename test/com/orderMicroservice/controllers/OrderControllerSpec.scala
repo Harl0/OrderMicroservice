@@ -39,9 +39,9 @@ class OrderControllerSpec extends UnitSpec
 
   "createOrder" should {
     "return a 201 (created) when an order could be created" in {
-      when(mockOrderService.createOrder(org.mockito.Matchers.eq(testOrder1))).thenReturn(Future.successful())
-
       val result = Helpers.call(orderController.createOrder, FakeRequest().withJsonBody(validOrderJson))
+
+      when(mockOrderService.createOrder(org.mockito.Matchers.eq(testOrder1))).thenReturn(Future.successful())
 
       whenReady(result) { res =>
         status(res) shouldEqual CREATED
@@ -50,8 +50,9 @@ class OrderControllerSpec extends UnitSpec
   }
 
   "return a 500 (internal server error) when an order could not be created" in {
-    when(mockOrderService.createOrder(org.mockito.Matchers.eq(testOrder1))).thenReturn(Future.failed(new Exception("mongo error")))
     val result = Helpers.call(orderController.createOrder, FakeRequest().withJsonBody(validOrderJson))
+
+    when(mockOrderService.createOrder(org.mockito.Matchers.eq(testOrder1))).thenReturn(Future.failed(new Exception("mongo error")))
 
     whenReady(result) { res =>
       status(res) shouldEqual INTERNAL_SERVER_ERROR
@@ -59,5 +60,11 @@ class OrderControllerSpec extends UnitSpec
     }
   }
 
-  ""
+  "return a 400 (bad request) when an order is invalid" in {
+    val result = Helpers.call(orderController.createOrder, FakeRequest().withJsonBody(invalidOrderJson))
+
+    whenReady(result) { res =>
+      status(res) shouldEqual BAD_REQUEST
+    }
+  }
 }
