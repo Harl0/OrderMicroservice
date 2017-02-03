@@ -23,7 +23,7 @@ import com.orderMicroservice.services.MongoOrderService
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mock.MockitoSugar
 import play.api.LoggerLike
-import play.api.libs.json.Json
+import play.api.libs.json.{JsString, Json}
 
 /**
   * Created by jason on 31/01/17.
@@ -35,6 +35,7 @@ trait OrderFixture extends MockitoSugar with ScalaFutures {
   implicit val materializer = ActorMaterializer()
 
   val validOrderJson = Json.obj("customerID" -> "1", "productID" -> "99", "price" -> BigDecimal(4.99))
+  val invalidOrderJson = JsString("")
   val testOrder1 = Order(customerID = "1", productID = "99", 4.99)
   val mockOrderService = mock[MongoOrderService]
   val mockLogger = mock[LoggerLike]
