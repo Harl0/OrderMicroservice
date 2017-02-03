@@ -36,7 +36,7 @@ class OrderController @Inject()(orderService: MongoOrderService, logger: LoggerL
 
   def createOrder: Action[JsValue] = Action.async(parse.json) { implicit request =>
     withJsonBody[Order] { order =>
-      orderService.createOrder(order).map { result => Results.Created}
+      orderService.createOrder(order).map { result => Results.Created }
         .recover {
           case ex => logger.error(creatingOrderError(order, ex))
             InternalServerError(Json.toJson(CREATE_ORDER_500))
